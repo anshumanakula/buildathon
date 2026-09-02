@@ -20,7 +20,7 @@ GET /health
 import io
 import os
 import time
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, send_from_directory
 from flask_cors import CORS
 
 from tracer import (
@@ -59,6 +59,13 @@ def cors_preflight(_any):
     return resp
 
 SAMPLE_DIR = os.path.join(os.path.dirname(__file__), "sample_data")
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+
+@app.route("/")
+def index():
+    """Serve the frontend so opening http://localhost:5000 works with zero CORS issues."""
+    return send_from_directory(BASE_DIR, "index.html")
 
 
 @app.route("/health")

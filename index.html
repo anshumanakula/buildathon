@@ -1305,8 +1305,12 @@
 <div class="toast" id="toast">Copied resolution draft to clipboard!</div>
 
 <script>
-window.RECON_API_BASE = "https://buildathon-n4az.onrender.com";
-const API_BASE = window.RECON_API_BASE || "http://localhost:5000";
+// Smart API base: same-origin when served by Flask locally, Render when opened as file://
+const API_BASE = (location.protocol === 'file:' || !location.hostname)
+  ? "https://buildathon-n4az.onrender.com"
+  : (location.hostname === 'localhost' || location.hostname === '127.0.0.1')
+    ? `${location.protocol}//${location.hostname}:5000`
+    : "https://buildathon-n4az.onrender.com";
 
 // DOM References
 const statusDot = document.getElementById("status-dot");
