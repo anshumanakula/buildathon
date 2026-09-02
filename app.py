@@ -136,6 +136,7 @@ def api_trace():
                 "break_hop": r.break_hop,
                 "break_detail": r.break_detail,
                 "resolution": r.resolution,
+                "payment_amount": payments_by_id[r.txn_id].amount if r.txn_id in payments_by_id else None,
             }
             for r in results
         ],

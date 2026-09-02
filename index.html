@@ -1649,17 +1649,24 @@ function computeConfidence(row) {
 }
 
 // CFO Exception Summary Renderer
+function getBreakAmount(r) {
+  const d = r.break_detail || {};
+  if (typeof d.variance === "number") return Math.abs(d.variance);
+  if (r.break_hop === "GATEWAY" && typeof r.payment_amount === "number") return r.payment_amount;
+  return 0;
+}
+
 function renderCfoSummary(data) {
   const s = data.summary;
   const rows = data.rows || [];
   const breakRows = rows.filter(r => r.break_hop !== "NONE");
 
-  const totalAtRisk = breakRows.reduce((sum, r) => sum + (parseFloat(r.amount || 0)), 0);
+  const totalAtRisk = breakRows.reduce((sum, r) => sum + getBreakAmount(r), 0);
   const byHop = {};
   breakRows.forEach(r => {
     if (!byHop[r.break_hop]) byHop[r.break_hop] = { count: 0, amount: 0 };
     byHop[r.break_hop].count++;
-    byHop[r.break_hop].amount += parseFloat(r.amount || 0);
+    byHop[r.break_hop].amount += getBreakAmount(r);
   });
 
   const highConf = breakRows.filter(r => computeConfidence(r).tier === "high").length;
