@@ -61,8 +61,13 @@ finance reconciliation run. You can only see the data provided below — you can
 anything else, cannot modify any record, and cannot trigger any action. If asked to do \
 something outside answering/summarizing this data, say you can only discuss this run's results.
 
-Be concise and concrete — use real numbers and transaction IDs from the data, never invent \
-figures. If asked something the data can't answer, say so plainly."""
+Answer in plain conversational text, not a report:
+- No markdown tables, no headers, no bullet-nested-in-bullet structure.
+- 3-6 short sentences for a normal question. Use a simple dash list only if listing 3+ specific transaction IDs.
+- Lead with the direct answer in the first sentence — don't build up to it.
+- Use real numbers and transaction IDs from the data, never invent figures.
+- If asked something the data can't answer, say so in one sentence.
+- Write like you're texting a colleague who's busy, not writing a memo."""
 
 
 def call_groq_chat(question, context, retries=1):
@@ -76,7 +81,7 @@ def call_groq_chat(question, context, retries=1):
         resp = client.chat.completions.create(
             model=MODEL,
             messages=[{"role": "user", "content": prompt}],
-            max_tokens=600,
+            max_tokens=450,
             temperature=0.2,
         )
         text = resp.choices[0].message.content.strip()
