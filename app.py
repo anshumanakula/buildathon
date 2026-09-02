@@ -37,17 +37,26 @@ CORS(app, resources={r"/*": {"origins": "*"}}, supports_credentials=False)
 
 @app.after_request
 def add_cors_headers(response):
-    # Explicit, unconditional CORS headers — handles the 'null' origin case
-    # (opening index.html as a local file:// page) that some CORS configs miss.
-    response.headers["Access-Control-Allow-Origin"] = request.headers.get("Origin", "*")
+    # When opened as a local file:// page, browsers send Origin: null.
+    # Returning "null" back is NOT treated as a wildcard — the browser still
+    # blocks the request. We must return "*" in that case.
+    origin = request.headers.get("Origin", "")
+    allowed_origin = "*" if (not origin or origin == "null") else origin
+    response.headers["Access-Control-Allow-Origin"] = allowed_origin
     response.headers["Access-Control-Allow-Methods"] = "GET, POST, OPTIONS"
     response.headers["Access-Control-Allow-Headers"] = "Content-Type, Authorization"
     return response
 
 
-@app.route("/api/<path:_any>", methods=["OPTIONS"])
+@app.route("/", defaults={"_any": ""}, methods=["OPTIONS"])
+@app.route("/<path:_any>", methods=["OPTIONS"])
 def cors_preflight(_any):
-    return "", 204
+    resp = app.make_response("")
+    resp.status_code = 204
+    resp.headers["Access-Control-Allow-Origin"] = "*"
+    resp.headers["Access-Control-Allow-Methods"] = "GET, POST, OPTIONS"
+    resp.headers["Access-Control-Allow-Headers"] = "Content-Type, Authorization"
+    return resp
 
 SAMPLE_DIR = os.path.join(os.path.dirname(__file__), "sample_data")
 
