@@ -1,0 +1,1602 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Razorpay — Chain Reconciliation Agent (Agentic Stack)</title>
+
+<!-- Modern Satoshi & JetBrains Mono Typography -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://api.fontshare.com/v2/css?f[]=satoshi@900,800,700,500,400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+  /* shadcn/ui Design Tokens — Modern Minimal Theme */
+  :root {
+    --radius: 0.375rem; /* 6px */
+    
+    --background: #F8FAFC;
+    --card: #FFFFFF;
+    --card-foreground: #0F172A;
+    
+    --primary: #0F172A;
+    --primary-foreground: #FFFFFF;
+    --rzp-blue: #0C83FF;
+    --rzp-blue-hover: #0066CC;
+    --rzp-blue-soft: #EFF6FF;
+    
+    --secondary: #F1F5F9;
+    --secondary-foreground: #0F172A;
+    
+    --muted: #F1F5F9;
+    --muted-foreground: #64748B;
+    
+    --accent: #F1F5F9;
+    --accent-foreground: #0F172A;
+    
+    --destructive: #EF4444;
+    --destructive-soft: #FEF2F2;
+    --destructive-border: #FCA5A5;
+    
+    --success: #10B981;
+    --success-soft: #ECFDF5;
+    --success-border: #A7F3D0;
+    
+    --warning: #F59E0B;
+    --warning-soft: #FFFBEB;
+    --warning-border: #FDE68A;
+    
+    --purple: #8B5CF6;
+    --purple-soft: #F5F3FF;
+    --purple-border: #DDD6FE;
+
+    --border: #E2E8F0;
+    --input: #E2E8F0;
+    --ring: #0C83FF;
+
+    --font-sans: 'Satoshi', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: var(--font-sans);
+    background-color: var(--background);
+    color: var(--card-foreground);
+    line-height: 1.5;
+    min-height: 100vh;
+    padding-bottom: 80px;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* Header Topbar */
+  .topbar {
+    background: #FFFFFF;
+    border-bottom: 1px solid var(--border);
+    padding: 14px 48px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .razorpay-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+  }
+
+  .rzp-mark {
+    height: 24px;
+    width: auto;
+  }
+
+  .rzp-brand-text {
+    font-family: 'Satoshi', sans-serif;
+    font-weight: 900;
+    font-size: 22px;
+    color: var(--primary);
+    letter-spacing: -0.6px;
+    line-height: 1;
+  }
+
+  /* shadcn/ui Badges */
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    border-radius: var(--radius);
+    padding: 2px 10px;
+    font-size: 11px;
+    font-weight: 600;
+    transition: color 0.15s ease, background-color 0.15s ease;
+  }
+
+  .badge-secondary {
+    background-color: var(--secondary);
+    color: var(--secondary-foreground);
+    border: 1px solid var(--border);
+  }
+
+  .badge-outline {
+    background-color: transparent;
+    color: var(--card-foreground);
+    border: 1px solid var(--border);
+  }
+
+  .badge-brand {
+    background-color: var(--rzp-blue-soft);
+    color: var(--rzp-blue);
+    border: 1px solid rgba(12, 131, 255, 0.2);
+    font-weight: 700;
+  }
+
+  .status-badge {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--muted-foreground);
+    background: var(--secondary);
+    padding: 6px 14px;
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+  }
+
+  .status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--muted-foreground);
+  }
+
+  .status-dot.live {
+    background: var(--success);
+    box-shadow: 0 0 8px var(--success);
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(1.1); }
+    100% { opacity: 1; transform: scale(1); }
+  }
+
+  /* Main Container */
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 36px 24px;
+  }
+
+  /* Hero Section */
+  .hero {
+    margin-bottom: 32px;
+  }
+
+  .hero-tag-wrap {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 12px;
+  }
+
+  .hero-badge {
+    background: var(--primary);
+    color: var(--primary-foreground);
+    font-size: 11px;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: var(--radius);
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+
+  .hero-ai-tag {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--success);
+    background: var(--success-soft);
+    border: 1px solid var(--success-border);
+    padding: 3px 10px;
+    border-radius: var(--radius);
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .hero h1 {
+    font-size: 36px;
+    font-weight: 800;
+    color: var(--primary);
+    letter-spacing: -0.02em;
+    line-height: 1.25;
+    margin-bottom: 10px;
+  }
+
+  .hero h1 span.highlight-green { color: var(--success); }
+  .hero h1 span.highlight-blue { color: var(--rzp-blue); }
+
+  .hero p {
+    font-size: 15px;
+    color: var(--muted-foreground);
+    max-width: 740px;
+    line-height: 1.6;
+    font-weight: 400;
+  }
+
+  /* Product Pills Bar */
+  .product-pills-bar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 20px;
+    flex-wrap: wrap;
+  }
+
+  .product-pill {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 8px 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--card-foreground);
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    transition: all 0.15s ease;
+  }
+
+  .product-pill:hover {
+    border-color: var(--rzp-blue);
+    background: var(--rzp-blue-soft);
+  }
+
+  .product-pill .pill-icon {
+    width: 22px;
+    height: 22px;
+    background: var(--secondary);
+    color: var(--rzp-blue);
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+  }
+
+  /* shadcn/ui Card Component */
+  .card {
+    background-color: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
+    margin-bottom: 28px;
+    overflow: hidden;
+  }
+
+  .card-header {
+    padding: 20px 24px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+    background: #FFFFFF;
+  }
+
+  .card-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--card-foreground);
+    letter-spacing: -0.01em;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .card-content {
+    padding: 24px;
+  }
+
+  /* File Dropzone Cards */
+  .upload-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+
+  .dropzone {
+    border: 2px dashed var(--border);
+    border-radius: var(--radius);
+    padding: 20px 16px;
+    background: #FAFAFA;
+    transition: all 0.15s ease;
+    cursor: pointer;
+    text-align: center;
+    position: relative;
+  }
+
+  .dropzone:hover, .dropzone.dragover {
+    border-color: var(--rzp-blue);
+    background: var(--rzp-blue-soft);
+  }
+
+  .dropzone input[type="file"] {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    opacity: 0;
+    cursor: pointer;
+  }
+
+  .dropzone-icon { font-size: 24px; margin-bottom: 8px; }
+  .dropzone-label { font-size: 14px; font-weight: 700; color: var(--card-foreground); margin-bottom: 4px; }
+  .dropzone-sub { font-size: 11px; color: var(--muted-foreground); }
+
+  .file-badge {
+    display: none;
+    margin-top: 10px;
+    font-size: 11px;
+    color: var(--rzp-blue);
+    background: var(--rzp-blue-soft);
+    border: 1px solid var(--border);
+    padding: 4px 10px;
+    border-radius: var(--radius);
+    font-weight: 600;
+    word-break: break-all;
+  }
+
+  .dropzone.has-file {
+    border-color: var(--rzp-blue);
+    background: #FFFFFF;
+  }
+
+  /* shadcn/ui Buttons */
+  button, .btn {
+    font-family: var(--font-sans);
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    border-radius: var(--radius);
+    padding: 0 20px;
+    height: 40px;
+    border: 1px solid transparent;
+    transition: all 0.15s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    outline: none;
+  }
+
+  button:disabled {
+    cursor: not-allowed;
+    opacity: 0.5 !important;
+  }
+
+  .btn-primary {
+    background-color: var(--rzp-blue);
+    color: #FFFFFF;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  }
+
+  .btn-primary:hover:not(:disabled) {
+    background-color: var(--rzp-blue-hover);
+  }
+
+  .btn-secondary {
+    background-color: var(--secondary);
+    color: var(--secondary-foreground);
+    border: 1px solid var(--border);
+  }
+
+  .btn-secondary:hover:not(:disabled) {
+    background-color: #E2E8F0;
+  }
+
+  .btn-outline {
+    background-color: #FFFFFF;
+    color: var(--card-foreground);
+    border: 1px solid var(--border);
+  }
+
+  .btn-outline:hover:not(:disabled) {
+    background-color: var(--secondary);
+  }
+
+  .btn-ghost {
+    background-color: transparent;
+    color: var(--card-foreground);
+  }
+
+  .btn-ghost:hover:not(:disabled) {
+    background-color: var(--secondary);
+  }
+
+  /* Notification Alerts */
+  .error-box {
+    background: var(--destructive-soft);
+    border: 1px solid var(--destructive-border);
+    color: var(--destructive);
+    padding: 14px 18px;
+    border-radius: var(--radius);
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 24px;
+    display: none;
+  }
+  .error-box.show { display: flex; align-items: center; gap: 10px; }
+
+  /* Loading Spinner Panel */
+  .loading-panel {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 48px;
+    text-align: center;
+    margin-bottom: 28px;
+    display: none;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
+  }
+  .loading-panel.show { display: block; animation: fadeIn 0.2s ease; }
+
+  .spinner {
+    width: 36px;
+    height: 36px;
+    border: 3px solid var(--secondary);
+    border-top-color: var(--rzp-blue);
+    border-radius: 50%;
+    margin: 0 auto 16px;
+    animation: spin 0.8s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .loading-text { font-size: 16px; font-weight: 700; color: var(--card-foreground); }
+  .loading-sub { font-size: 13px; color: var(--muted-foreground); margin-top: 4px; }
+
+  /* Results Dashboard */
+  .results { display: none; }
+  .results.show { display: block; animation: fadeIn 0.3s ease; }
+
+  /* Dashboard Stats Grid */
+  .stat-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 16px;
+    margin-bottom: 28px;
+  }
+
+  .stat-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px 22px;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  }
+
+  .stat-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--muted-foreground);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 6px;
+  }
+
+  .stat-value {
+    font-size: 30px;
+    font-weight: 800;
+    color: var(--card-foreground);
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+  }
+
+  .stat-value.blue { color: var(--rzp-blue); }
+  .stat-value.green { color: var(--success); }
+  .stat-value.purple { color: var(--purple); }
+
+  .stat-sub {
+    font-size: 12px;
+    color: var(--muted-foreground);
+    margin-top: 6px;
+  }
+
+  /* Hop Breakdown Filters */
+  .hop-breakdown {
+    display: flex;
+    gap: 10px;
+    padding: 20px 24px;
+    flex-wrap: wrap;
+  }
+
+  .hop-chip {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 14px;
+    border-radius: var(--radius);
+    font-size: 13px;
+    font-weight: 600;
+    border: 1px solid var(--border);
+    background: #FFFFFF;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    height: auto;
+  }
+
+  .hop-chip:hover { border-color: var(--rzp-blue); background: var(--secondary); }
+  .hop-chip.active { border-color: var(--rzp-blue); background: var(--rzp-blue-soft); color: var(--rzp-blue); }
+
+  .hop-chip .hop-count {
+    font-weight: 800;
+    font-size: 14px;
+    padding: 2px 6px;
+    border-radius: 4px;
+    background: rgba(0, 0, 0, 0.05);
+  }
+
+  .hop-chip.gateway { color: var(--destructive); border-color: var(--destructive-border); background: var(--destructive-soft); }
+  .hop-chip.settlement { color: var(--warning); border-color: var(--warning-border); background: var(--warning-soft); }
+  .hop-chip.ledger { color: var(--purple); border-color: var(--purple-border); background: var(--purple-soft); }
+  .hop-chip.clean { color: var(--success); border-color: var(--success-border); background: var(--success-soft); }
+
+  /* Toolbar: Search Input */
+  .table-toolbar {
+    padding: 14px 24px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    background: #FAFAFA;
+  }
+
+  .search-input-wrap {
+    flex: 1;
+    min-width: 240px;
+    position: relative;
+  }
+
+  .search-input-wrap input {
+    width: 100%;
+    background: #FFFFFF;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 8px 14px 8px 36px;
+    color: var(--card-foreground);
+    font-family: var(--font-sans);
+    font-size: 13px;
+    outline: none;
+    transition: border-color 0.15s;
+  }
+
+  .search-input-wrap input:focus {
+    border-color: var(--rzp-blue);
+    box-shadow: 0 0 0 2px rgba(12, 131, 255, 0.15);
+  }
+
+  .search-icon {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--muted-foreground);
+    font-size: 13px;
+  }
+
+  /* Table Design */
+  .table-container { overflow-x: auto; }
+
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+
+  th {
+    text-align: left;
+    padding: 12px 24px;
+    font-weight: 700;
+    color: var(--muted-foreground);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-bottom: 1px solid var(--border);
+    background: #F8FAFC;
+  }
+
+  td {
+    padding: 16px 24px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+  }
+
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: #FAFAFA; }
+
+  .mono {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--rzp-blue);
+    font-weight: 600;
+  }
+
+  /* Chain Hops Progress Badge */
+  .chain-visual {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--secondary);
+    padding: 4px 10px;
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+  }
+
+  .chain-visual .step { display: flex; align-items: center; gap: 4px; }
+  .chain-visual .arrow { color: var(--muted-foreground); font-size: 11px; }
+  .chain-visual .icon { font-size: 13px; }
+
+  /* Tags & Badges */
+  .tag {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: var(--radius);
+    letter-spacing: 0.3px;
+    text-transform: uppercase;
+  }
+
+  .tag-gateway { background: var(--destructive-soft); color: var(--destructive); border: 1px solid var(--destructive-border); }
+  .tag-settlement { background: var(--warning-soft); color: var(--warning); border: 1px solid var(--warning-border); }
+  .tag-ledger { background: var(--purple-soft); color: var(--purple); border: 1px solid var(--purple-border); }
+
+  /* Resolution Card */
+  .resolution-box {
+    background: #FAFCFF;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 12px 14px;
+    max-width: 380px;
+  }
+
+  .resolution-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 6px;
+  }
+
+  .resolution-type {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--rzp-blue);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .resolution-draft {
+    font-size: 12px;
+    color: var(--card-foreground);
+    line-height: 1.5;
+    background: #FFFFFF;
+    border: 1px solid var(--border);
+    padding: 8px 10px;
+    border-radius: var(--radius);
+    font-family: var(--font-mono);
+    word-break: break-word;
+  }
+
+  .resolution-approval {
+    font-size: 11px;
+    color: var(--muted-foreground);
+    font-weight: 600;
+    margin-top: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .btn-copy {
+    background: var(--secondary);
+    border: 1px solid var(--border);
+    color: var(--card-foreground);
+    padding: 2px 8px;
+    border-radius: var(--radius);
+    font-size: 11px;
+    font-weight: 600;
+    height: 24px;
+  }
+
+  .btn-copy:hover {
+    background: #E2E8F0;
+  }
+
+  /* Empty State */
+  .empty-state {
+    text-align: center;
+    padding: 40px 24px;
+    color: var(--muted-foreground);
+    font-size: 14px;
+    font-weight: 500;
+  }
+
+  /* Ask RAY Q&A Panel */
+  .qa-thread {
+    padding: 20px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    max-height: 360px;
+    overflow-y: auto;
+    background: #FAFAFA;
+  }
+
+  .qa-empty {
+    color: var(--muted-foreground);
+    font-size: 13px;
+    text-align: center;
+    padding: 16px 0;
+  }
+
+  .qa-msg {
+    max-width: 85%;
+    padding: 10px 16px;
+    border-radius: var(--radius);
+    font-size: 13px;
+    line-height: 1.5;
+    white-space: pre-wrap;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  }
+
+  .qa-msg.user {
+    align-self: flex-end;
+    background-color: var(--rzp-blue);
+    color: #FFFFFF;
+    font-weight: 500;
+  }
+
+  .qa-msg.agent {
+    align-self: flex-start;
+    background-color: #FFFFFF;
+    color: var(--card-foreground);
+    border: 1px solid var(--border);
+    font-weight: 500;
+  }
+
+  .qa-msg.agent.loading {
+    color: var(--muted-foreground);
+    font-style: italic;
+  }
+
+  .qa-source {
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--success);
+    margin-top: 4px;
+    display: inline-block;
+    background: var(--success-soft);
+    padding: 2px 6px;
+    border-radius: var(--radius);
+    border: 1px solid var(--success-border);
+  }
+
+  .qa-suggestions {
+    display: flex;
+    gap: 8px;
+    padding: 0 24px 14px;
+    flex-wrap: wrap;
+    background: #FAFAFA;
+  }
+
+  .qa-chip {
+    background: #FFFFFF;
+    border: 1px solid var(--border);
+    color: var(--card-foreground);
+    font-size: 12px;
+    font-weight: 600;
+    padding: 6px 12px;
+    border-radius: var(--radius);
+    cursor: pointer;
+    transition: all 0.15s ease;
+    height: auto;
+  }
+
+  .qa-chip:hover {
+    border-color: var(--rzp-blue);
+    background: var(--rzp-blue-soft);
+    color: var(--rzp-blue);
+  }
+
+  .qa-input-row {
+    display: flex;
+    gap: 10px;
+    padding: 16px 24px;
+    border-top: 1px solid var(--border);
+    background: #FFFFFF;
+  }
+
+  .qa-input-row input {
+    flex: 1;
+    padding: 9px 14px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    font-size: 13px;
+    font-family: var(--font-sans);
+    outline: none;
+    transition: border-color 0.15s;
+  }
+
+  .qa-input-row input:focus {
+    border-color: var(--rzp-blue);
+    box-shadow: 0 0 0 2px rgba(12, 131, 255, 0.15);
+  }
+
+  /* Floating RAY AI Badge */
+  .floating-ray-badge {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    background: #FFFFFF;
+    border: 1px solid var(--border);
+    color: var(--card-foreground);
+    padding: 8px 16px;
+    border-radius: var(--radius);
+    font-size: 13px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    cursor: pointer;
+    transition: transform 0.15s ease;
+    z-index: 90;
+  }
+
+  .floating-ray-badge:hover {
+    transform: translateY(-2px);
+    border-color: var(--success);
+  }
+
+  /* Footer */
+  .footer {
+    text-align: center;
+    padding: 36px 24px 0;
+    font-size: 13px;
+    color: var(--muted-foreground);
+  }
+
+  /* Toast Notification */
+  .toast {
+    position: fixed;
+    bottom: 24px;
+    left: 24px;
+    background: var(--primary);
+    color: var(--primary-foreground);
+    padding: 10px 18px;
+    border-radius: var(--radius);
+    font-size: 13px;
+    font-weight: 600;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    display: none;
+    z-index: 300;
+  }
+
+  .toast.show { display: block; animation: fadeIn 0.2s ease; }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(4px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+</style>
+</head>
+<body>
+
+<!-- Navigation Header -->
+<div class="topbar">
+  <div class="brand">
+    <a href="#" class="razorpay-logo">
+      <svg class="rzp-mark" viewBox="0 0 28 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M16.59 0L0 24H8.76L25.35 0H16.59Z" fill="#0C83FF"/>
+        <path d="M21.2 5.62L13.1 17.34H19.78L27.88 5.62H21.2Z" fill="#0F172A"/>
+      </svg>
+      <span class="rzp-brand-text">Razorpay</span>
+    </a>
+    <span class="badge badge-brand">Buildathon · Finance Ops</span>
+  </div>
+
+  <div class="status-badge">
+    <span class="status-dot" id="status-dot"></span>
+    <span id="status-text">Connecting to API...</span>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- Hero Header Section -->
+  <div class="hero">
+    <div class="hero-tag-wrap">
+      <span class="hero-badge">Buildathon 2026</span>
+      <span class="hero-ai-tag">❇️ Agentic AI Native</span>
+    </div>
+
+    <h1>Chain reconciliation agent for <span class="highlight-green">automated financial integrity</span></h1>
+    <p>Traces full multi-hop payment chains (<span class="highlight-blue">Payment ➔ Settlement ➔ Ledger</span>), pinpoints exact break locations, and generates automated AI resolution drafts instantly.</p>
+
+    <!-- Product Pills Bar -->
+    <div class="product-pills-bar">
+      <div class="product-pill">
+        <span class="pill-icon">💳</span>
+        <span>Gateway Log</span>
+      </div>
+      <div class="product-pill">
+        <span class="pill-icon">🏦</span>
+        <span>Bank Settlement</span>
+      </div>
+      <div class="product-pill">
+        <span class="pill-icon">📖</span>
+        <span>Internal Ledger</span>
+      </div>
+      <div class="product-pill" style="background: var(--success-soft); border-color: var(--success-border);">
+        <span class="pill-icon" style="background: #FFFFFF; color: var(--success);">⚡</span>
+        <span style="color: var(--success);">Groq AI Resolver</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Upload Card -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-title">
+        <span>📂 Data Source File Uploads</span>
+      </div>
+      <span class="badge badge-secondary">CSV Datasets Supported</span>
+    </div>
+
+    <div class="card-content">
+      <div class="upload-grid">
+        <!-- Payments File -->
+        <div class="dropzone" id="dz-payments">
+          <div class="dropzone-icon">💳</div>
+          <div class="dropzone-label">Payments CSV</div>
+          <div class="dropzone-sub">Razorpay transaction records</div>
+          <div class="file-badge" id="badge-payments"></div>
+          <input type="file" id="payments-file" accept=".csv">
+        </div>
+
+        <!-- Settlements File -->
+        <div class="dropzone" id="dz-settlements">
+          <div class="dropzone-icon">🏦</div>
+          <div class="dropzone-label">Settlements CSV</div>
+          <div class="dropzone-sub">Bank payout & settlement logs</div>
+          <div class="file-badge" id="badge-settlements"></div>
+          <input type="file" id="settlements-file" accept=".csv">
+        </div>
+
+        <!-- Ledger File -->
+        <div class="dropzone" id="dz-ledger">
+          <div class="dropzone-icon">📖</div>
+          <div class="dropzone-label">Ledger CSV</div>
+          <div class="dropzone-sub">Internal accounting entries</div>
+          <div class="file-badge" id="badge-ledger"></div>
+          <input type="file" id="ledger-file" accept=".csv">
+        </div>
+
+        <!-- Ground Truth File -->
+        <div class="dropzone" id="dz-gt">
+          <div class="dropzone-icon">🎯</div>
+          <div class="dropzone-label">Ground Truth CSV</div>
+          <div class="dropzone-sub">Optional verification benchmark</div>
+          <div class="file-badge" id="badge-gt"></div>
+          <input type="file" id="gt-file" accept=".csv">
+        </div>
+      </div>
+
+      <div style="display:flex; gap:12px; align-items:center; flex-wrap:wrap;">
+        <button class="btn-primary" id="run-btn">
+          <span>🚀 Trace Chain & Draft Resolutions</span>
+        </button>
+        <button class="btn-secondary" id="sample-btn">
+          <span>✨ Run Sample Data</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Error Notification Box -->
+  <div class="error-box" id="error-box">
+    <span>⚠️</span>
+    <span id="error-text">An error occurred while running trace.</span>
+  </div>
+
+  <!-- Loading State Panel -->
+  <div class="loading-panel" id="loading-panel">
+    <div class="spinner"></div>
+    <div class="loading-text" id="loading-text">Tracing multi-hop transaction chain...</div>
+    <div class="loading-sub">Walking Payment → Settlement → Ledger paths & generating resolution actions</div>
+  </div>
+
+  <!-- Results Dashboard -->
+  <div class="results" id="results">
+
+    <!-- Stat Grid -->
+    <div class="stat-grid" id="stat-grid"></div>
+
+    <!-- Hop Breakdown Panel -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">
+          <span>📊 Chain Hop Breakdown</span>
+        </div>
+        <span class="badge badge-secondary" id="hop-total-count">0 chains</span>
+      </div>
+      <div class="hop-breakdown" id="hop-breakdown"></div>
+    </div>
+
+    <!-- Broken Chains Table Card -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">
+          <span>🚨 Broken Chains & Drafted AI Resolutions</span>
+        </div>
+        <span class="badge badge-secondary" id="break-count">0 broken</span>
+      </div>
+
+      <!-- Search Toolbar -->
+      <div class="table-toolbar">
+        <div class="search-input-wrap">
+          <span class="search-icon">🔍</span>
+          <input type="text" id="search-input" placeholder="Search by Transaction ID, Order ID, or reason...">
+        </div>
+      </div>
+
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>Transaction & Details</th>
+              <th>Chain Pipeline Visual</th>
+              <th>Break Reason</th>
+              <th>Drafted Resolution Action</th>
+            </tr>
+          </thead>
+          <tbody id="break-rows"></tbody>
+        </table>
+      </div>
+      <div class="empty-state" id="no-breaks" style="display:none;">
+        🎉 All transaction chains resolved end-to-end with zero breaks!
+      </div>
+    </div>
+
+    <!-- Q&A Agent Card -->
+    <div class="card" id="qa-panel">
+      <div class="card-header">
+        <div class="card-title">
+          <span>❇️ Ask RAY — FinOps AI Q&A Agent</span>
+        </div>
+        <span class="badge badge-outline">Read-Only · Grounded in Trace Data</span>
+      </div>
+      <div id="qa-thread" class="qa-thread"></div>
+      <div class="qa-suggestions" id="qa-suggestions">
+        <button class="qa-chip" data-q="Summarize this run for a CFO">📊 Summarize for a CFO</button>
+        <button class="qa-chip" data-q="Which breaks are most urgent?">🔥 Most urgent breaks</button>
+        <button class="qa-chip" data-q="What broke at the ledger hop and why?">📖 Ledger breaks</button>
+        <button class="qa-chip" data-q="Explain gateway failure reasons">💳 Gateway breaks</button>
+      </div>
+      <div class="qa-input-row">
+        <input type="text" id="qa-input" placeholder="Ask RAY a question about this run (e.g. 'summarize for CFO')...">
+        <button class="btn-primary" id="qa-send">
+          <span>Ask RAY ➔</span>
+        </button>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="footer" id="footer-text">
+    Deterministic 3-hop tracer → Groq-drafted resolutions → scored against ground truth.
+  </div>
+
+</div>
+
+<!-- Floating RAY AI Helper Badge -->
+<div class="floating-ray-badge" onclick="document.getElementById('qa-panel').scrollIntoView({behavior: 'smooth'})">
+  <span>❇️</span>
+  <span>Ask RAY (Agentic AI)</span>
+</div>
+
+<!-- Toast Alert -->
+<div class="toast" id="toast">Copied resolution draft to clipboard!</div>
+
+<script>
+const API_BASE = window.RECON_API_BASE || "http://localhost:5000";
+
+// DOM References
+const statusDot = document.getElementById("status-dot");
+const statusText = document.getElementById("status-text");
+const runBtn = document.getElementById("run-btn");
+const sampleBtn = document.getElementById("sample-btn");
+const errorBox = document.getElementById("error-box");
+const errorText = document.getElementById("error-text");
+const loadingPanel = document.getElementById("loading-panel");
+const loadingText = document.getElementById("loading-text");
+const results = document.getElementById("results");
+const searchInput = document.getElementById("search-input");
+const toast = document.getElementById("toast");
+
+let lastRunData = null; // Stores most recent /api/trace response for /api/ask
+let currentFilter = "ALL";
+
+// Health Check API
+async function checkHealth() {
+  try {
+    const res = await fetch(`${API_BASE}/health`);
+    const data = await res.json();
+    statusDot.className = "status-dot live";
+    statusText.textContent = data.llm_configured 
+      ? "Razorpay API Live · Groq Connected" 
+      : "Razorpay API Live · Fallback Templates";
+  } catch (e) {
+    statusDot.className = "status-dot";
+    statusText.textContent = "API Unreachable — Check server on port 5000";
+  }
+}
+checkHealth();
+
+// File Input UX Handlers
+const fileInputs = [
+  { inputId: "payments-file", dzId: "dz-payments", badgeId: "badge-payments" },
+  { inputId: "settlements-file", dzId: "dz-settlements", badgeId: "badge-settlements" },
+  { inputId: "ledger-file", dzId: "dz-ledger", badgeId: "badge-ledger" },
+  { inputId: "gt-file", dzId: "dz-gt", badgeId: "badge-gt" }
+];
+
+fileInputs.forEach(({ inputId, dzId, badgeId }) => {
+  const input = document.getElementById(inputId);
+  const dz = document.getElementById(dzId);
+  const badge = document.getElementById(badgeId);
+
+  input.addEventListener("change", () => {
+    if (input.files && input.files[0]) {
+      const file = input.files[0];
+      badge.textContent = `✓ ${file.name} (${(file.size / 1024).toFixed(1)} KB)`;
+      badge.style.display = "inline-block";
+      dz.classList.add("has-file");
+    } else {
+      badge.style.display = "none";
+      dz.classList.remove("has-file");
+    }
+  });
+
+  ['dragenter', 'dragover'].forEach(eventName => {
+    dz.addEventListener(eventName, (e) => { e.preventDefault(); dz.classList.add('dragover'); }, false);
+  });
+  ['dragleave', 'drop'].forEach(eventName => {
+    dz.addEventListener(eventName, (e) => { e.preventDefault(); dz.classList.remove('dragover'); }, false);
+  });
+});
+
+function showError(msg) { 
+  errorText.textContent = msg; 
+  errorBox.classList.add("show"); 
+}
+
+function hideError() { 
+  errorBox.classList.remove("show"); 
+}
+
+function showToast(msg) {
+  toast.textContent = msg;
+  toast.classList.add("show");
+  setTimeout(() => toast.classList.remove("show"), 2500);
+}
+
+// API Trace Execution
+async function runTrace(formData) {
+  hideError();
+  results.classList.remove("show");
+  loadingPanel.classList.add("show");
+  runBtn.disabled = true;
+  sampleBtn.disabled = true;
+  loadingText.textContent = "Tracing transaction hops across Payment → Settlement → Ledger...";
+
+  try {
+    const res = await fetch(`${API_BASE}/api/trace`, { method: "POST", body: formData });
+    if (!res.ok) {
+      const errData = await res.json().catch(() => ({}));
+      throw new Error(errData.error || `Server returned ${res.status}`);
+    }
+    const data = await res.json();
+    renderResults(data);
+  } catch (e) {
+    showError(`Execution failed: ${e.message}`);
+  } finally {
+    loadingPanel.classList.remove("show");
+    runBtn.disabled = false;
+    sampleBtn.disabled = false;
+  }
+}
+
+// Button Events
+runBtn.addEventListener("click", () => {
+  const pf = document.getElementById("payments-file").files[0];
+  const sf = document.getElementById("settlements-file").files[0];
+  const lf = document.getElementById("ledger-file").files[0];
+  const gf = document.getElementById("gt-file").files[0];
+
+  if (!pf || !sf || !lf) {
+    showError("Please select Payments CSV, Settlements CSV, and Ledger CSV to execute reconciliation trace.");
+    return;
+  }
+
+  const formData = new FormData();
+  formData.append("payments", pf);
+  formData.append("settlements", sf);
+  formData.append("ledger", lf);
+  if (gf) formData.append("ground_truth", gf);
+
+  runTrace(formData);
+});
+
+sampleBtn.addEventListener("click", async () => {
+  hideError();
+  loadingPanel.classList.add("show");
+  loadingText.textContent = "Retrieving sample Razorpay dataset...";
+  sampleBtn.disabled = true;
+  runBtn.disabled = true;
+
+  try {
+    const res = await fetch(`${API_BASE}/api/sample`);
+    if (!res.ok) throw new Error(`Sample dataset unavailable (${res.status})`);
+    const sample = await res.json();
+
+    const formData = new FormData();
+    formData.append("payments", new Blob([sample.payments_csv], { type: "text/csv" }), "payments.csv");
+    formData.append("settlements", new Blob([sample.settlements_csv], { type: "text/csv" }), "settlements.csv");
+    formData.append("ledger", new Blob([sample.ledger_csv], { type: "text/csv" }), "ledger.csv");
+    formData.append("ground_truth", new Blob([sample.ground_truth_csv], { type: "text/csv" }), "ground_truth.csv");
+
+    await runTrace(formData);
+  } catch (e) {
+    showError(`Sample loading failed: ${e.message}`);
+    loadingPanel.classList.remove("show");
+    sampleBtn.disabled = false;
+    runBtn.disabled = false;
+  }
+});
+
+// Hop Metadata
+const hopMeta = {
+  GATEWAY: { label: "Gateway", cls: "gateway" },
+  SETTLEMENT: { label: "Settlement", cls: "settlement" },
+  LEDGER: { label: "Ledger", cls: "ledger" },
+};
+
+function statusIcon(status) {
+  if (status === "OK") return "✅";
+  if (status === "MISMATCH") return "❌";
+  if (status === "MISSING") return "⚠️";
+  return "•";
+}
+
+function renderChainVisual(row) {
+  return `
+    <div class="chain-visual">
+      <span class="step" title="Payment: ${row.payment_status}">
+        <span class="icon">${statusIcon(row.payment_status)}</span>
+      </span>
+      <span class="arrow">➔</span>
+      <span class="step" title="Settlement: ${row.settlement_status}">
+        <span class="icon">${statusIcon(row.settlement_status)}</span>
+      </span>
+      <span class="arrow">➔</span>
+      <span class="step" title="Ledger: ${row.ledger_status}">
+        <span class="icon">${statusIcon(row.ledger_status)}</span>
+      </span>
+    </div>
+  `;
+}
+
+// Render Results Dashboard
+function renderResults(data) {
+  const s = data.summary;
+
+  // Stat Grid
+  const statGrid = document.getElementById("stat-grid");
+  let statCards = `
+    <div class="stat-card">
+      <div class="stat-label">Total Traced</div>
+      <div class="stat-value">${s.total}</div>
+      <div class="stat-sub">payment chains analyzed</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Clean Resolution</div>
+      <div class="stat-value green">${s.clean_rate_pct}%</div>
+      <div class="stat-sub">${s.clean} of ${s.total} fully resolved</div>
+    </div>
+  `;
+
+  if (data.metrics) {
+    statCards += `
+      <div class="stat-card">
+        <div class="stat-label">Break Accuracy</div>
+        <div class="stat-value blue">${data.metrics.break_hop_accuracy}%</div>
+        <div class="stat-sub">scored vs Ground Truth</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">AI Resolutions</div>
+        <div class="stat-value purple">${s.total - s.clean}</div>
+        <div class="stat-sub">${s.using_llm ? "Groq AI Engine" : "Template Engine"} · ${s.runtime_seconds}s</div>
+      </div>
+    `;
+  } else {
+    statCards += `
+      <div class="stat-card">
+        <div class="stat-label">AI Resolutions</div>
+        <div class="stat-value purple">${s.total - s.clean}</div>
+        <div class="stat-sub">${s.using_llm ? "Groq AI Engine" : "Template Engine"} · ${s.runtime_seconds}s</div>
+      </div>
+    `;
+  }
+  statGrid.innerHTML = statCards;
+
+  // Hop Breakdown Chips
+  const hopBreakdown = document.getElementById("hop-breakdown");
+  const hops = s.breaks_by_hop || {};
+  let hopHtml = `
+    <div class="hop-chip clean ${currentFilter === 'CLEAN' ? 'active' : ''}" onclick="setFilter('CLEAN')">
+      <span class="hop-count">${s.clean}</span> Clean Chains
+    </div>
+  `;
+
+  for (const [hop, count] of Object.entries(hops)) {
+    const meta = hopMeta[hop] || { label: hop, cls: "" };
+    hopHtml += `
+      <div class="hop-chip ${meta.cls} ${currentFilter === hop ? 'active' : ''}" onclick="setFilter('${hop}')">
+        <span class="hop-count">${count}</span> ${meta.label} Breaks
+      </div>
+    `;
+  }
+  
+  if (currentFilter !== "ALL") {
+    hopHtml += `
+      <div class="hop-chip" onclick="setFilter('ALL')" style="margin-left:auto; color: var(--rzp-blue);">
+        Clear Filter (Show All)
+      </div>
+    `;
+  }
+
+  hopBreakdown.innerHTML = hopHtml;
+  document.getElementById("hop-total-count").textContent = `${s.total} chains total`;
+
+  renderTableRows();
+
+  document.getElementById("footer-text").textContent =
+    `Execution completed in ${s.runtime_seconds}s · ${s.using_llm ? "Groq AI drafting active" : "fallback templates used"} · human approval required prior to ledger entry update.`;
+
+  lastRunData = data;
+  resetQaThread();
+
+  results.classList.add("show");
+}
+
+function setFilter(filterType) {
+  currentFilter = filterType;
+  if (lastRunData) renderResults(lastRunData);
+}
+
+// Live Search Input Listener
+searchInput.addEventListener("input", () => {
+  renderTableRows();
+});
+
+// Render Table Rows with Filter & Search
+function renderTableRows() {
+  if (!lastRunData) return;
+
+  const searchTerm = searchInput.value.toLowerCase().trim();
+  let rows = lastRunData.rows;
+
+  if (currentFilter === "CLEAN") {
+    rows = rows.filter(r => r.break_hop === "NONE");
+  } else if (currentFilter !== "ALL") {
+    rows = rows.filter(r => r.break_hop === currentFilter);
+  } else {
+    rows = rows.filter(r => r.break_hop !== "NONE");
+  }
+
+  if (searchTerm) {
+    rows = rows.filter(r => 
+      (r.txn_id && r.txn_id.toLowerCase().includes(searchTerm)) ||
+      (r.order_id && r.order_id.toLowerCase().includes(searchTerm)) ||
+      (r.break_detail?.reason && r.break_detail.reason.toLowerCase().includes(searchTerm)) ||
+      (r.break_hop && r.break_hop.toLowerCase().includes(searchTerm))
+    );
+  }
+
+  document.getElementById("break-count").textContent = `${rows.length} records displayed`;
+  const rowsEl = document.getElementById("break-rows");
+  const noBreaks = document.getElementById("no-breaks");
+
+  if (rows.length === 0) {
+    rowsEl.innerHTML = "";
+    noBreaks.style.display = "block";
+  } else {
+    noBreaks.style.display = "none";
+    rowsEl.innerHTML = rows.map(r => {
+      const meta = hopMeta[r.break_hop] || { label: r.break_hop || "Resolved", cls: "clean" };
+      const res = r.resolution;
+      
+      const outcomeBadge = r.scoring_outcome ? 
+        `<span class="badge badge-secondary" style="font-size:10px; margin-left:6px;">${r.scoring_outcome}</span>` : '';
+
+      return `
+        <tr>
+          <td>
+            <span class="mono">${r.txn_id}</span>${outcomeBadge}<br>
+            <span class="mono" style="color: var(--muted-foreground); font-size: 11px;">Order: ${r.order_id || "(No Order ID)"}</span><br>
+            <span class="tag tag-${meta.cls}" style="margin-top: 6px;">Broke at ${meta.label}</span>
+          </td>
+          <td>${renderChainVisual(r)}</td>
+          <td style="font-size: 12px; color: var(--card-foreground); max-width: 240px; line-height: 1.5; font-weight:500;">
+            ${r.break_detail?.reason || "Chain resolved end-to-end without breaks."}
+          </td>
+          <td>
+            ${res ? `
+              <div class="resolution-box">
+                <div class="resolution-header">
+                  <span class="resolution-type">📌 ${res.resolution_type.replace(/_/g, " ")}</span>
+                  <button class="btn-copy" onclick="copyText('${escapeQuotes(res.draft)}')">Copy Draft</button>
+                </div>
+                <div class="resolution-draft">${res.draft}</div>
+                <div class="resolution-approval">
+                  <span>⏸ Requires Human Approval</span>
+                  <span style="color: var(--purple); font-weight:700;">Groq AI</span>
+                </div>
+              </div>
+            ` : `<span style="color: var(--muted-foreground); font-size:12px; font-style:italic;">No action required</span>`}
+          </td>
+        </tr>
+      `;
+    }).join("");
+  }
+}
+
+function escapeQuotes(str) {
+  return str.replace(/'/g, "\\'").replace(/"/g, '&quot;');
+}
+
+function copyText(text) {
+  navigator.clipboard.writeText(text).then(() => {
+    showToast("Copied resolution draft to clipboard!");
+  }).catch(() => {
+    showToast("Failed to copy text.");
+  });
+}
+
+// ---- Q&A Chat Panel Agent Logic ----
+
+const qaThread = document.getElementById("qa-thread");
+const qaInput = document.getElementById("qa-input");
+const qaSend = document.getElementById("qa-send");
+
+function resetQaThread() {
+  qaThread.innerHTML = `<div class="qa-empty">Ask RAY anything about this trace run — answers are strictly grounded in the actual results above.</div>`;
+}
+
+function appendQaMessage(role, text, source) {
+  const empty = qaThread.querySelector(".qa-empty");
+  if (empty) empty.remove();
+  const div = document.createElement("div");
+  div.className = `qa-msg ${role}`;
+  div.textContent = text;
+  if (source && role === "agent") {
+    const sourceEl = document.createElement("div");
+    sourceEl.className = "qa-source";
+    sourceEl.textContent = source === "groq_llm" ? "❇️ Groq AI · Grounded in run data" : "⚡ Rule-based analysis";
+    div.appendChild(sourceEl);
+  }
+  qaThread.appendChild(div);
+  qaThread.scrollTop = qaThread.scrollHeight;
+  return div;
+}
+
+async function askQuestion(question) {
+  if (!question || !question.trim()) return;
+  if (!lastRunData) {
+    appendQaMessage("agent", "Please run a trace first — I can only answer questions about a completed reconciliation run.");
+    return;
+  }
+
+  appendQaMessage("user", question);
+  const loadingEl = appendQaMessage("agent", "Analyzing run data...");
+  loadingEl.classList.add("loading");
+  qaInput.value = "";
+  qaSend.disabled = true;
+
+  try {
+    const res = await fetch(`${API_BASE}/api/ask`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        question,
+        summary: lastRunData.summary,
+        rows: lastRunData.rows,
+        metrics: lastRunData.metrics || null,
+      }),
+    });
+    const data = await res.json();
+    loadingEl.remove();
+    if (!res.ok) {
+      appendQaMessage("agent", data.error || "Something went wrong answering that question.");
+    } else {
+      appendQaMessage("agent", data.answer, data.source);
+    }
+  } catch (e) {
+    loadingEl.remove();
+    appendQaMessage("agent", `Request failed: ${e.message}`);
+  } finally {
+    qaSend.disabled = false;
+  }
+}
+
+qaSend.addEventListener("click", () => askQuestion(qaInput.value));
+qaInput.addEventListener("keydown", (e) => {
+  if (e.key === "Enter") askQuestion(qaInput.value);
+});
+document.getElementById("qa-suggestions").addEventListener("click", (e) => {
+  const btn = e.target.closest(".qa-chip");
+  if (btn) askQuestion(btn.dataset.q);
+});
+
+// Canvas Spotlight Cursor Effect
+(function initSpotlight() {
+  const canvas = document.createElement('canvas');
+  canvas.style.cssText = 'position: fixed; top: 0; left: 0; pointer-events: none; z-index: 9999; width: 100vw; height: 100vh;';
+  document.body.appendChild(canvas);
+
+  const ctx = canvas.getContext('2d');
+  let mouseX = -1000, mouseY = -1000;
+
+  function resize() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+  window.addEventListener('resize', resize);
+  resize();
+
+  window.addEventListener('mousemove', (e) => {
+    mouseX = e.clientX;
+    mouseY = e.clientY;
+  });
+  window.addEventListener('mouseleave', () => {
+    mouseX = -1000;
+    mouseY = -1000;
+  });
+
+  function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    if (mouseX !== -1000 && mouseY !== -1000) {
+      const gradient = ctx.createRadialGradient(mouseX, mouseY, 0, mouseX, mouseY, 220);
+      gradient.addColorStop(0, 'rgba(12, 131, 255, 0.12)');
+      gradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
+      ctx.fillStyle = gradient;
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+    }
+    requestAnimationFrame(draw);
+  }
+  requestAnimationFrame(draw);
+})();
+</script>
+
+</body>
+</html>

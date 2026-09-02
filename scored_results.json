@@ -1,0 +1,781 @@
+{
+  "summary": {
+    "total": 63,
+    "matched": 52,
+    "match_rate_pct": 82.54,
+    "precision": 1.0,
+    "recall": 0.8387,
+    "f1": 0.9123
+  },
+  "rows": [
+    {
+      "txn_id": "pay_100045",
+      "order_id": "ORD-2045",
+      "method": "MATCHED_EXACT",
+      "exception_type": null,
+      "confidence": 1.0,
+      "score_breakdown": {},
+      "agent_verdict": null,
+      "agent_reason": null,
+      "scoring_outcome": "TRUE_POSITIVE"
+    },
+    {
+      "txn_id": "pay_100052",
+      "order_id": "ORD-2052",
+      "method": "MATCHED_EXACT",
+      "exception_type": null,
+      "confidence": 1.0,
+      "score_breakdown": {},
+      "agent_verdict": null,
+      "agent_reason": null,
+      "scoring_outcome": "TRUE_POSITIVE"
+    },
+    {
+      "txn_id": "pay_100050",
+      "order_id": "ORD-2050",
+      "method": "MATCHED_EXACT",
+      "exception_type": null,
+      "confidence": 1.0,
+      "score_breakdown": {},
+      "agent_verdict": null,
+      "agent_reason": null,
+      "scoring_outcome": "TRUE_POSITIVE"
+    },
+    {
+      "txn_id": "pay_100015",
+      "order_id": "ORD-2015",
+      "method": "MATCHED_EXACT",
+      "exception_type": null,
+      "confidence": 1.0,
+      "score_breakdown": {},
+      "agent_verdict": null,
+      "agent_reason": null,
+      "scoring_outcome": "TRUE_POSITIVE"
+    },
+    {
+      "txn_id": "pay_100056",
+      "order_id": "ORD-2056",
+      "method": "MATCHED_EXACT",
+      "exception_type": null,
+      "confidence": 1.0,
+      "score_breakdown": {},
+      "agent_verdict": null,
+      "agent_reason": null,
+      "scoring_outcome": "TRUE_POSITIVE"
+    },
+    {
+      "txn_id": "pay_100026",
+      "order_id": "ORD-2026",
+      "method": "MATCHED_EXACT",
+      "exception_type": null,
+      "confidence": 1.0,
+      "score_breakdown": {},
+      "agent_verdict": null,
+      "agent_reason": null,
+      "scoring_outcome": "TRUE_POSITIVE"
+    },
+    {
+      "txn_id": "pay_100012",
+      "order_id": "ORD-2012",
+      "method": "MATCHED_EXACT",
+      "exception_type": null,
+      "confidence": 1.0,
+      "score_breakdown": {},
+      "agent_verdict": null,
+      "agent_reason": null,
+      "scoring_outcome": "TRUE_POSITIVE"
+    },
+    {
+      "txn_id": "pay_100022",
+      "order_id": "ORD-2022",
+      "method": "MATCHED_EXACT",
+      "exception_type": null,
+      "confidence": 1.0,
+      "score_breakdown": {},
+      "agent_verdict": null,
+      "agent_reason": null,
+      "scoring_outcome": "TRUE_POSITIVE"
+    },
+    {
+      "txn_id": "pay_100036",
+      "order_id": "ORD-2036",
+      "method": "MATCHED_EXACT",
+      "exception_type": null,
+      "confidence": 1.0,
+      "score_breakdown": {},
+      "agent_verdict": null,
+      "agent_reason": null,
+      "scoring_outcome": "TRUE_POSITIVE"
+    },
+    {
+      "txn_id": "pay_100014",
+      "order_id": "ORD-2014",
+      "method": "MATCHED_EXACT",
+      "exception_type": null,
+      "confidence": 1.0,
+      "score_breakdown": {},
+      "agent_verdict": null,
+      "agent_reason": null,
+      "scoring_outcome": "TRUE_POSITIVE"
+    },
+    {
+      "txn_id": "pay_100006_r2",
+      "order_id": "ORD-2006",
+      "method": "MATCHED_EXACT",
+      "exception_type": null,
+      "confidence": 1.0,
+      "score_breakdown": {},
+      "agent_verdict": null,
+      "agent_reason": null,
+      "scoring_outcome": "TRUE_POSITIVE"
+    },
+    {
+      "txn_id": "pay_100058",
+      "order_id": "ORD-2058",
+      "method": "MATCHED_EXACT",
+      "exception_type": null,
+      "confidence": 1.0,
+      "score_breakdown": {},
+      "agent_verdict": null,
+      "agent_reason": null,
+      "scoring_outcome": "TRUE_POSITIVE"
+    },
+    {
+      "txn_id": "pay_100049",
+      "order_id": "ORD-2049",
+      "method": "MATCHED_EXACT",
+      "exception_type": null,
+      "confidence": 1.0,
+      "score_breakdown": {},
+      "agent_verdict": null,
+      "agent_reason": null,
+      "scoring_outcome": "TRUE_POSITIVE"
+    },
+    {
+      "txn_id": "pay_100029_r2",
+      "order_id": "ORD-2029",
+      "method": "MATCHED_EXACT",
+      "exception_type": null,
+      "confidence": 1.0,
+      "score_breakdown": {},
+      "agent_verdict": null,
+      "agent_reason": null,
+      "scoring_outcome": "TRUE_POSITIVE"
+    },
+    {
+      "txn_id": "pay_100055",
+      "order_id": "ORD-2055",
+      "method": "MATCHED_EXACT",
+      "exception_type": null,
+      "confidence": 1.0,
+      "score_breakdown": {},
+      "agent_verdict": null,
+      "agent_reason": null,
+      "scoring_outcome": "TRUE_POSITIVE"
+    },
+    {
+      "txn_id": "pay_100020",
+      "order_id": "ORD-2020",
+      "method": "MATCHED_EXACT",
+      "exception_type": null,
+      "confidence": 1.0,
+      "score_breakdown": {},
+      "agent_verdict": null,
+      "agent_reason": null,
+      "scoring_outcome": "TRUE_POSITIVE"
+    },
+    {
+      "txn_id": "pay_100003",
+      "order_id": "ORD-2003",
+      "method": "MATCHED_EXACT",
+      "exception_type": null,
+      "confidence": 1.0,
+      "score_breakdown": {},
+      "agent_verdict": null,
+      "agent_reason": null,
+      "scoring_outcome": "TRUE_POSITIVE"
+    },
+    {
+      "txn_id": "pay_100002",
+      "order_id": "ORD-2002",
+      "method": "MATCHED_EXACT",
+      "exception_type": null,
+      "confidence": 1.0,
+      "score_breakdown": {},
+      "agent_verdict": null,
+      "agent_reason": null,
+      "scoring_outcome": "TRUE_POSITIVE"
+    },
+    {
+      "txn_id": "pay_100027",
+      "order_id": "ORD-2027",
+      "method": "MATCHED_EXACT",
+      "exception_type": null,
+      "confidence": 1.0,
+      "score_breakdown": {},
+      "agent_verdict": null,
+      "agent_reason": null,
+      "scoring_outcome": "TRUE_POSITIVE"
+    },
+    {
+      "txn_id": "pay_100057",
+      "order_id": "ORD-2057",
+      "method": "MATCHED_EXACT",
+      "exception_type": null,
+      "confidence": 1.0,
+      "score_breakdown": {},
+      "agent_verdict": null,
+      "agent_reason": null,
+      "scoring_outcome": "TRUE_POSITIVE"
+    },
+    {
+      "txn_id": "pay_100043",
+      "order_id": "ORD-2043",
+      "method": "MATCHED_EXACT",
+      "exception_type": null,
+      "confidence": 1.0,
+      "score_breakdown": {},
+      "agent_verdict": null,
+      "agent_reason": null,
+      "scoring_outcome": "TRUE_POSITIVE"
+    },
+    {
+      "txn_id": "pay_100030",
+      "order_id": "ORD-2030",
+      "method": "MATCHED_EXACT",
+      "exception_type": null,
+      "confidence": 1.0,
+      "score_breakdown": {},
+      "agent_verdict": null,
+      "agent_reason": null,
+      "scoring_outcome": "TRUE_POSITIVE"
+    },
+    {
+      "txn_id": "pay_100042",
+      "order_id": "ORD-2042",
+      "method": "MATCHED_EXACT",
+      "exception_type": null,
+      "confidence": 1.0,
+      "score_breakdown": {},
+      "agent_verdict": null,
+      "agent_reason": null,
+      "scoring_outcome": "TRUE_POSITIVE"
+    },
+    {
+      "txn_id": "pay_100035",
+      "order_id": "ORD-2035",
+      "method": "MATCHED_EXACT",
+      "exception_type": null,
+      "confidence": 1.0,
+      "score_breakdown": {},
+      "agent_verdict": null,
+      "agent_reason": null,
+      "scoring_outcome": "TRUE_POSITIVE"
+    },
+    {
+      "txn_id": "pay_100021",
+      "order_id": "ORD-2021",
+      "method": "MATCHED_EXACT",
+      "exception_type": null,
+      "confidence": 1.0,
+      "score_breakdown": {},
+      "agent_verdict": null,
+      "agent_reason": null,
+      "scoring_outcome": "TRUE_POSITIVE"
+    },
+    {
+      "txn_id": "pay_100013",
+      "order_id": "ORD-2013",
+      "method": "MATCHED_EXACT",
+      "exception_type": null,
+      "confidence": 1.0,
+      "score_breakdown": {},
+      "agent_verdict": null,
+      "agent_reason": null,
+      "scoring_outcome": "TRUE_POSITIVE"
+    },
+    {
+      "txn_id": "pay_100059",
+      "order_id": "ORD-2059",
+      "method": "MATCHED_EXACT",
+      "exception_type": null,
+      "confidence": 1.0,
+      "score_breakdown": {},
+      "agent_verdict": null,
+      "agent_reason": null,
+      "scoring_outcome": "TRUE_POSITIVE"
+    },
+    {
+      "txn_id": "pay_100017",
+      "order_id": "ORD-2017",
+      "method": "MATCHED_EXACT",
+      "exception_type": null,
+      "confidence": 1.0,
+      "score_breakdown": {},
+      "agent_verdict": null,
+      "agent_reason": null,
+      "scoring_outcome": "TRUE_POSITIVE"
+    },
+    {
+      "txn_id": "pay_100009",
+      "order_id": "ORD-2009",
+      "method": "MATCHED_EXACT",
+      "exception_type": null,
+      "confidence": 1.0,
+      "score_breakdown": {},
+      "agent_verdict": null,
+      "agent_reason": null,
+      "scoring_outcome": "TRUE_POSITIVE"
+    },
+    {
+      "txn_id": "pay_100047",
+      "order_id": "ORD-2047",
+      "method": "MATCHED_EXACT",
+      "exception_type": null,
+      "confidence": 1.0,
+      "score_breakdown": {},
+      "agent_verdict": null,
+      "agent_reason": null,
+      "scoring_outcome": "TRUE_POSITIVE"
+    },
+    {
+      "txn_id": "pay_100054",
+      "order_id": "ORD-2054",
+      "method": "MATCHED_EXACT",
+      "exception_type": null,
+      "confidence": 1.0,
+      "score_breakdown": {},
+      "agent_verdict": null,
+      "agent_reason": null,
+      "scoring_outcome": "TRUE_POSITIVE"
+    },
+    {
+      "txn_id": "pay_100007",
+      "order_id": "ORD-2007",
+      "method": "MATCHED_EXACT",
+      "exception_type": null,
+      "confidence": 1.0,
+      "score_breakdown": {},
+      "agent_verdict": null,
+      "agent_reason": null,
+      "scoring_outcome": "TRUE_POSITIVE"
+    },
+    {
+      "txn_id": "pay_100016",
+      "order_id": "ORD-2016",
+      "method": "MATCHED_EXACT",
+      "exception_type": null,
+      "confidence": 1.0,
+      "score_breakdown": {},
+      "agent_verdict": null,
+      "agent_reason": null,
+      "scoring_outcome": "TRUE_POSITIVE"
+    },
+    {
+      "txn_id": "pay_100053",
+      "order_id": "ORD-2053",
+      "method": "MATCHED_EXACT",
+      "exception_type": null,
+      "confidence": 1.0,
+      "score_breakdown": {},
+      "agent_verdict": null,
+      "agent_reason": null,
+      "scoring_outcome": "TRUE_POSITIVE"
+    },
+    {
+      "txn_id": "pay_100041",
+      "order_id": "ORD-2041",
+      "method": "MATCHED_EXACT",
+      "exception_type": null,
+      "confidence": 1.0,
+      "score_breakdown": {},
+      "agent_verdict": null,
+      "agent_reason": null,
+      "scoring_outcome": "TRUE_POSITIVE"
+    },
+    {
+      "txn_id": "pay_100001",
+      "order_id": "ORD-2001",
+      "method": "MATCHED_EXACT",
+      "exception_type": null,
+      "confidence": 1.0,
+      "score_breakdown": {},
+      "agent_verdict": null,
+      "agent_reason": null,
+      "scoring_outcome": "TRUE_POSITIVE"
+    },
+    {
+      "txn_id": "pay_100038",
+      "order_id": "ORD-2038",
+      "method": "MATCHED_EXACT",
+      "exception_type": null,
+      "confidence": 1.0,
+      "score_breakdown": {},
+      "agent_verdict": null,
+      "agent_reason": null,
+      "scoring_outcome": "TRUE_POSITIVE"
+    },
+    {
+      "txn_id": "pay_100019",
+      "order_id": "ORD-2019",
+      "method": "MATCHED_EXACT",
+      "exception_type": null,
+      "confidence": 1.0,
+      "score_breakdown": {},
+      "agent_verdict": null,
+      "agent_reason": null,
+      "scoring_outcome": "TRUE_POSITIVE"
+    },
+    {
+      "txn_id": "pay_100044",
+      "order_id": "ORD-2044",
+      "method": "MATCHED_EXACT",
+      "exception_type": null,
+      "confidence": 1.0,
+      "score_breakdown": {},
+      "agent_verdict": null,
+      "agent_reason": null,
+      "scoring_outcome": "TRUE_POSITIVE"
+    },
+    {
+      "txn_id": "pay_100051",
+      "order_id": "ORD-2051",
+      "method": "MATCHED_EXACT",
+      "exception_type": null,
+      "confidence": 1.0,
+      "score_breakdown": {},
+      "agent_verdict": null,
+      "agent_reason": null,
+      "scoring_outcome": "TRUE_POSITIVE"
+    },
+    {
+      "txn_id": "pay_100028",
+      "order_id": "ORD-2028",
+      "method": "MATCHED_EXACT",
+      "exception_type": null,
+      "confidence": 1.0,
+      "score_breakdown": {},
+      "agent_verdict": null,
+      "agent_reason": null,
+      "scoring_outcome": "TRUE_POSITIVE"
+    },
+    {
+      "txn_id": "pay_100010",
+      "order_id": "ORD-2010",
+      "method": "MATCHED_EXACT",
+      "exception_type": null,
+      "confidence": 1.0,
+      "score_breakdown": {},
+      "agent_verdict": null,
+      "agent_reason": null,
+      "scoring_outcome": "TRUE_POSITIVE"
+    },
+    {
+      "txn_id": "pay_100018",
+      "order_id": "ORD-2018",
+      "method": "MATCHED_EXACT",
+      "exception_type": null,
+      "confidence": 1.0,
+      "score_breakdown": {},
+      "agent_verdict": null,
+      "agent_reason": null,
+      "scoring_outcome": "TRUE_POSITIVE"
+    },
+    {
+      "txn_id": "pay_100023",
+      "order_id": "ORD-2023",
+      "method": "MATCHED_EXACT",
+      "exception_type": null,
+      "confidence": 1.0,
+      "score_breakdown": {},
+      "agent_verdict": null,
+      "agent_reason": null,
+      "scoring_outcome": "TRUE_POSITIVE"
+    },
+    {
+      "txn_id": "pay_100025",
+      "order_id": "ORD-2025",
+      "method": "EXCEPTION",
+      "exception_type": "AMOUNT_MISMATCH",
+      "confidence": 0.685,
+      "score_breakdown": {
+        "amount_score": 0.213,
+        "date_score": 1.0,
+        "name_score": 1.0
+      },
+      "agent_verdict": null,
+      "agent_reason": null,
+      "scoring_outcome": "FALSE_NEGATIVE"
+    },
+    {
+      "txn_id": "pay_100004",
+      "order_id": "ORD-2004",
+      "method": "EXCEPTION",
+      "exception_type": "LOW_CONFIDENCE",
+      "confidence": 0.814,
+      "score_breakdown": {
+        "amount_score": 0.534,
+        "date_score": 1.0,
+        "name_score": 1.0
+      },
+      "agent_verdict": "NEEDS_HUMAN",
+      "agent_reason": "Amount mismatch; confidence below threshold",
+      "scoring_outcome": "FALSE_NEGATIVE"
+    },
+    {
+      "txn_id": "pay_100011",
+      "order_id": "ORD-2011",
+      "method": "EXCEPTION",
+      "exception_type": "LOW_CONFIDENCE",
+      "confidence": 0.8,
+      "score_breakdown": {
+        "amount_score": 1.0,
+        "date_score": 0.333,
+        "name_score": 1.0
+      },
+      "agent_verdict": "NEEDS_HUMAN",
+      "agent_reason": "Date mismatch; confidence low",
+      "scoring_outcome": "FALSE_NEGATIVE"
+    },
+    {
+      "txn_id": "pay_100046",
+      "order_id": "ORD-2046",
+      "method": "MATCHED_FUZZY",
+      "exception_type": null,
+      "confidence": 0.9,
+      "score_breakdown": {
+        "amount_score": 1.0,
+        "date_score": 0.667,
+        "name_score": 1.0
+      },
+      "agent_verdict": null,
+      "agent_reason": null,
+      "scoring_outcome": "TRUE_POSITIVE"
+    },
+    {
+      "txn_id": "pay_100037",
+      "order_id": "ORD-2037",
+      "method": "MATCHED_FUZZY",
+      "exception_type": null,
+      "confidence": 0.946,
+      "score_breakdown": {
+        "amount_score": 0.866,
+        "date_score": 1.0,
+        "name_score": 1.0
+      },
+      "agent_verdict": null,
+      "agent_reason": null,
+      "scoring_outcome": "TRUE_POSITIVE"
+    },
+    {
+      "txn_id": "pay_100039",
+      "order_id": "ORD-2039",
+      "method": "EXCEPTION",
+      "exception_type": "AMOUNT_MISMATCH",
+      "confidence": 0.643,
+      "score_breakdown": {
+        "amount_score": 0.108,
+        "date_score": 1.0,
+        "name_score": 1.0
+      },
+      "agent_verdict": null,
+      "agent_reason": null,
+      "scoring_outcome": "FALSE_NEGATIVE"
+    },
+    {
+      "txn_id": "pay_100024",
+      "order_id": "ORD-2024",
+      "method": "MATCHED_FUZZY",
+      "exception_type": null,
+      "confidence": 0.9,
+      "score_breakdown": {
+        "amount_score": 1.0,
+        "date_score": 0.667,
+        "name_score": 1.0
+      },
+      "agent_verdict": null,
+      "agent_reason": null,
+      "scoring_outcome": "TRUE_POSITIVE"
+    },
+    {
+      "txn_id": "pay_100060",
+      "order_id": "ORD-2031",
+      "method": "EXCEPTION",
+      "exception_type": "DUPLICATE_AMBIGUOUS",
+      "confidence": 0.164,
+      "score_breakdown": {
+        "amount_score": 0.0,
+        "date_score": 0.0,
+        "name_score": 0.545
+      },
+      "agent_verdict": "NEEDS_HUMAN",
+      "agent_reason": "Low confidence; amounts, dates, and names differ significantly",
+      "scoring_outcome": "TRUE_NEGATIVE"
+    },
+    {
+      "txn_id": "pay_100005",
+      "order_id": "ORD-2005",
+      "method": "MATCHED_FUZZY",
+      "exception_type": null,
+      "confidence": 0.909,
+      "score_breakdown": {
+        "amount_score": 0.773,
+        "date_score": 1.0,
+        "name_score": 1.0
+      },
+      "agent_verdict": null,
+      "agent_reason": null,
+      "scoring_outcome": "TRUE_POSITIVE"
+    },
+    {
+      "txn_id": "pay_100029",
+      "order_id": "ORD-2025",
+      "method": "EXCEPTION",
+      "exception_type": "NO_COUNTERPART",
+      "confidence": 0.409,
+      "score_breakdown": {
+        "amount_score": 0.0,
+        "date_score": 1.0,
+        "name_score": 0.364
+      },
+      "agent_verdict": null,
+      "agent_reason": null,
+      "scoring_outcome": "FALSE_NEGATIVE"
+    },
+    {
+      "txn_id": "pay_100031",
+      "order_id": "ORD-2031",
+      "method": "MATCHED_FUZZY",
+      "exception_type": null,
+      "confidence": 0.9,
+      "score_breakdown": {
+        "amount_score": 1.0,
+        "date_score": 0.667,
+        "name_score": 1.0
+      },
+      "agent_verdict": null,
+      "agent_reason": null,
+      "scoring_outcome": "TRUE_POSITIVE"
+    },
+    {
+      "txn_id": "pay_100008",
+      "order_id": "ORD-2008",
+      "method": "EXCEPTION",
+      "exception_type": "LOW_CONFIDENCE",
+      "confidence": 0.771,
+      "score_breakdown": {
+        "amount_score": 0.427,
+        "date_score": 1.0,
+        "name_score": 1.0
+      },
+      "agent_verdict": "NEEDS_HUMAN",
+      "agent_reason": "Amount differs; confidence low, requires human review",
+      "scoring_outcome": "FALSE_NEGATIVE"
+    },
+    {
+      "txn_id": "pay_100006",
+      "order_id": "ORD-2034",
+      "method": "EXCEPTION",
+      "exception_type": "NO_COUNTERPART",
+      "confidence": 0.327,
+      "score_breakdown": {
+        "amount_score": 0.0,
+        "date_score": 1.0,
+        "name_score": 0.091
+      },
+      "agent_verdict": null,
+      "agent_reason": null,
+      "scoring_outcome": "FALSE_NEGATIVE"
+    },
+    {
+      "txn_id": "pay_100048",
+      "order_id": "ORD-2048",
+      "method": "MATCHED_FUZZY",
+      "exception_type": null,
+      "confidence": 0.95,
+      "score_breakdown": {
+        "amount_score": 1.0,
+        "date_score": 1.0,
+        "name_score": 0.833
+      },
+      "agent_verdict": null,
+      "agent_reason": null,
+      "scoring_outcome": "TRUE_POSITIVE"
+    },
+    {
+      "txn_id": "pay_100034",
+      "order_id": "ORD-2034",
+      "method": "EXCEPTION",
+      "exception_type": "LOW_CONFIDENCE",
+      "confidence": 0.821,
+      "score_breakdown": {
+        "amount_score": 0.553,
+        "date_score": 1.0,
+        "name_score": 1.0
+      },
+      "agent_verdict": "NEEDS_HUMAN",
+      "agent_reason": "Amount mismatch; confidence low, requires human review",
+      "scoring_outcome": "FALSE_NEGATIVE"
+    },
+    {
+      "txn_id": "pay_100032",
+      "order_id": "ORD-2032",
+      "method": "MATCHED_FUZZY",
+      "exception_type": null,
+      "confidence": 0.921,
+      "score_breakdown": {
+        "amount_score": 0.802,
+        "date_score": 1.0,
+        "name_score": 1.0
+      },
+      "agent_verdict": null,
+      "agent_reason": null,
+      "scoring_outcome": "TRUE_POSITIVE"
+    },
+    {
+      "txn_id": "pay_100040",
+      "order_id": "ORD-2040",
+      "method": "MATCHED_FUZZY",
+      "exception_type": null,
+      "confidence": 0.9,
+      "score_breakdown": {
+        "amount_score": 1.0,
+        "date_score": 0.667,
+        "name_score": 1.0
+      },
+      "agent_verdict": null,
+      "agent_reason": null,
+      "scoring_outcome": "TRUE_POSITIVE"
+    },
+    {
+      "txn_id": "pay_100050_r2",
+      "order_id": "ORD-2034",
+      "method": "EXCEPTION",
+      "exception_type": "NO_COUNTERPART",
+      "confidence": 0.382,
+      "score_breakdown": {
+        "amount_score": 0.0,
+        "date_score": 1.0,
+        "name_score": 0.273
+      },
+      "agent_verdict": null,
+      "agent_reason": null,
+      "scoring_outcome": "FALSE_NEGATIVE"
+    },
+    {
+      "txn_id": "pay_100033",
+      "order_id": "ORD-2033",
+      "method": "EXCEPTION",
+      "exception_type": "LOW_CONFIDENCE",
+      "confidence": 0.8,
+      "score_breakdown": {
+        "amount_score": 1.0,
+        "date_score": 0.333,
+        "name_score": 1.0
+      },
+      "agent_verdict": "NEEDS_HUMAN",
+      "agent_reason": "Date mismatch; confidence flagged as low",
+      "scoring_outcome": "FALSE_NEGATIVE"
+    }
+  ]
+}

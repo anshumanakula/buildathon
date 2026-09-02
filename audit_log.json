@@ -1,0 +1,103 @@
+[
+  {
+    "event": "agent_run_start",
+    "using_llm": true,
+    "model": "openai/gpt-oss-120b",
+    "timestamp": "2026-08-24T05:50:42.396019+00:00"
+  },
+  {
+    "event": "exception_reviewed",
+    "source": "groq_llm",
+    "txn_id": "pay_100004",
+    "order_id": "ORD-2004",
+    "exception_type": "LOW_CONFIDENCE",
+    "score_breakdown": {
+      "amount_score": 0.534,
+      "date_score": 1.0,
+      "name_score": 1.0
+    },
+    "verdict": "NEEDS_HUMAN",
+    "reason": "Amounts differ and confidence is flagged low, requiring human review",
+    "timestamp": "2026-08-24T05:50:45.331550+00:00"
+  },
+  {
+    "event": "exception_reviewed",
+    "source": "groq_llm",
+    "txn_id": "pay_100011",
+    "order_id": "ORD-2011",
+    "exception_type": "LOW_CONFIDENCE",
+    "score_breakdown": {
+      "amount_score": 1.0,
+      "date_score": 0.333,
+      "name_score": 1.0
+    },
+    "verdict": "NEEDS_HUMAN",
+    "reason": "Date mismatch reduces confidence despite high amount and name similarity",
+    "timestamp": "2026-08-24T05:50:46.226545+00:00"
+  },
+  {
+    "event": "exception_reviewed",
+    "source": "groq_llm",
+    "txn_id": "pay_100060",
+    "order_id": "ORD-2031",
+    "exception_type": "DUPLICATE_AMBIGUOUS",
+    "score_breakdown": {
+      "amount_score": 0.0,
+      "date_score": 0.0,
+      "name_score": 0.545
+    },
+    "verdict": "NEEDS_HUMAN",
+    "reason": "Low confidence and mismatched amount, date, and name indicate ambiguity",
+    "timestamp": "2026-08-24T05:50:47.274264+00:00"
+  },
+  {
+    "event": "exception_reviewed",
+    "source": "groq_llm",
+    "txn_id": "pay_100008",
+    "order_id": "ORD-2008",
+    "exception_type": "LOW_CONFIDENCE",
+    "score_breakdown": {
+      "amount_score": 0.427,
+      "date_score": 1.0,
+      "name_score": 1.0
+    },
+    "verdict": "NEEDS_HUMAN",
+    "reason": "Amount differs and confidence is low, so human verification is required",
+    "timestamp": "2026-08-24T05:50:48.365514+00:00"
+  },
+  {
+    "event": "exception_reviewed",
+    "source": "error_fallback",
+    "txn_id": "pay_100034",
+    "order_id": "ORD-2034",
+    "exception_type": "LOW_CONFIDENCE",
+    "score_breakdown": {
+      "amount_score": 0.553,
+      "date_score": 1.0,
+      "name_score": 1.0
+    },
+    "verdict": "NEEDS_HUMAN",
+    "reason": "Agent error, defaulting to human review: Expecting value: line 1 column 1 (char 0)",
+    "timestamp": "2026-08-24T05:50:49.517857+00:00"
+  },
+  {
+    "event": "exception_reviewed",
+    "source": "groq_llm",
+    "txn_id": "pay_100033",
+    "order_id": "ORD-2033",
+    "exception_type": "LOW_CONFIDENCE",
+    "score_breakdown": {
+      "amount_score": 1.0,
+      "date_score": 0.333,
+      "name_score": 1.0
+    },
+    "verdict": "NEEDS_HUMAN",
+    "reason": "Date differs by two days, causing low confidence despite matching amount and name.",
+    "timestamp": "2026-08-24T05:50:50.476695+00:00"
+  },
+  {
+    "event": "agent_run_end",
+    "exceptions_reviewed": 6,
+    "timestamp": "2026-08-24T05:50:50.476695+00:00"
+  }
+]
