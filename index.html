@@ -1379,12 +1379,12 @@ function renderResults(data) {
   hopBreakdown.innerHTML = hopHtml;
   document.getElementById("hop-total-count").textContent = `${s.total} chains total`;
 
+  lastRunData = data;
   renderTableRows();
 
   document.getElementById("footer-text").textContent =
     `Execution completed in ${s.runtime_seconds}s · ${s.using_llm ? "Groq AI drafting active" : "fallback templates used"} · human approval required prior to ledger entry update.`;
 
-  lastRunData = data;
   resetQaThread();
 
   results.classList.add("show");
