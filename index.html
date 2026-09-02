@@ -1057,6 +1057,9 @@
           <span class="search-icon">🔍</span>
           <input type="text" id="search-input" placeholder="Search by Transaction ID, Order ID, or reason...">
         </div>
+        <button class="btn-secondary" onclick="exportAuditReportCSV()" style="height:36px; font-size:12px; white-space:nowrap;">
+          <span>📥 Export Audit CSV</span>
+        </button>
       </div>
 
       <div class="table-container">
@@ -1456,11 +1459,19 @@ function renderTableRows() {
               <div class="resolution-box">
                 <div class="resolution-header">
                   <span class="resolution-type">📌 ${res.resolution_type.replace(/_/g, " ")}</span>
-                  <button class="btn-copy" onclick="copyText('${escapeQuotes(res.draft)}')">Copy Draft</button>
+                  <div style="display:flex; gap:4px;">
+                    <button class="btn-copy" onclick="copyText('${escapeQuotes(res.draft)}')">Copy Draft</button>
+                    <button class="btn-copy" onclick="toggleApproveResolution('${r.txn_id}')" style="${approvedTxns.has(r.txn_id) ? 'background:var(--success-soft); color:var(--success); border-color:var(--success-border); font-weight:700;' : ''}">
+                      ${approvedTxns.has(r.txn_id) ? 'Approved ✓' : 'Approve Fix'}
+                    </button>
+                  </div>
                 </div>
                 <div class="resolution-draft">${res.draft}</div>
                 <div class="resolution-approval">
-                  <span>⏸ Requires Human Approval</span>
+                  ${approvedTxns.has(r.txn_id) 
+                    ? `<span style="color:var(--success); font-weight:700;">✅ Approved & Synced</span>`
+                    : `<span>⏸ Requires Human Approval</span>`
+                  }
                   <span style="color: var(--purple); font-weight:700;">Groq AI</span>
                 </div>
               </div>
@@ -1470,6 +1481,47 @@ function renderTableRows() {
       `;
     }).join("");
   }
+}
+
+const approvedTxns = new Set();
+
+function toggleApproveResolution(txnId) {
+  if (approvedTxns.has(txnId)) {
+    approvedTxns.delete(txnId);
+    showToast(`Reset approval status for ${txnId}`);
+  } else {
+    approvedTxns.add(txnId);
+    showToast(`✅ Approved resolution for ${txnId}!`);
+  }
+  renderTableRows();
+}
+
+function exportAuditReportCSV() {
+  if (!lastRunData) {
+    showError("No reconciliation run available to export — please run a trace first.");
+    return;
+  }
+
+  let csvContent = "Transaction ID,Order ID,Settlement ID,Break Hop,Break Reason,Resolution Type,Resolution Draft,Approval Status,Scoring Outcome\n";
+
+  lastRunData.rows.forEach(r => {
+    const isApproved = approvedTxns.has(r.txn_id) ? "APPROVED_BY_HUMAN" : (r.break_hop === "NONE" ? "N/A_CLEAN" : "PENDING_APPROVAL");
+    const reason = (r.break_detail?.reason || "").replace(/"/g, '""');
+    const draft = (r.resolution?.draft || "").replace(/"/g, '""');
+    const type = r.resolution?.resolution_type || "NONE";
+
+    csvContent += `"${r.txn_id}","${r.order_id || ''}","${r.settlement_id || ''}","${r.break_hop}","${reason}","${type}","${draft}","${isApproved}","${r.scoring_outcome || ''}"\n`;
+  });
+
+  const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.setAttribute("href", url);
+  link.setAttribute("download", `Razorpay_Reconciliation_Audit_Report_${Date.now()}.csv`);
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  showToast("Downloaded Audit Report CSV!");
 }
 
 function escapeQuotes(str) {
