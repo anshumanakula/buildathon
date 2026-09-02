@@ -897,6 +897,168 @@
     from { opacity: 0; transform: translateY(4px); }
     to { opacity: 1; transform: translateY(0); }
   }
+
+  /* CFO Exception Summary Card */
+  .cfo-summary-card {
+    background: linear-gradient(135deg, #0F172A 0%, #1E3A5F 100%);
+    border-radius: var(--radius);
+    padding: 28px 32px;
+    color: #FFFFFF;
+    margin-bottom: 28px;
+    box-shadow: 0 4px 24px rgba(12, 131, 255, 0.2);
+    display: none;
+  }
+  .cfo-summary-card.show { display: block; }
+  .cfo-summary-card .cfo-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+  }
+  .cfo-summary-card .cfo-title {
+    font-size: 16px;
+    font-weight: 800;
+    letter-spacing: -0.3px;
+    color: #FFFFFF;
+  }
+  .cfo-summary-card .cfo-subtitle {
+    font-size: 12px;
+    color: rgba(255,255,255,0.55);
+    font-weight: 500;
+    margin-top: 2px;
+  }
+  .cfo-tag {
+    background: rgba(12,131,255,0.25);
+    color: #60A5FA;
+    border: 1px solid rgba(12,131,255,0.4);
+    border-radius: var(--radius);
+    padding: 4px 10px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.4px;
+    text-transform: uppercase;
+  }
+  .cfo-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 16px;
+    margin-bottom: 20px;
+  }
+  .cfo-metric {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: var(--radius);
+    padding: 14px 16px;
+  }
+  .cfo-metric-label {
+    font-size: 11px;
+    font-weight: 600;
+    color: rgba(255,255,255,0.5);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 6px;
+  }
+  .cfo-metric-value {
+    font-size: 22px;
+    font-weight: 800;
+    color: #FFFFFF;
+    letter-spacing: -0.5px;
+    line-height: 1;
+  }
+  .cfo-metric-sub {
+    font-size: 11px;
+    color: rgba(255,255,255,0.4);
+    margin-top: 4px;
+  }
+  .cfo-metric-value.red { color: #F87171; }
+  .cfo-metric-value.green { color: #34D399; }
+  .cfo-metric-value.yellow { color: #FBBF24; }
+  .cfo-breakdown-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 0;
+    border-top: 1px solid rgba(255,255,255,0.07);
+    font-size: 13px;
+  }
+  .cfo-breakdown-row:first-child { border-top: none; }
+  .cfo-hop-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .cfo-hop-dot.gateway { background: #F87171; }
+  .cfo-hop-dot.settlement { background: #FBBF24; }
+  .cfo-hop-dot.ledger { background: #A78BFA; }
+  .cfo-breakdown-label { flex: 1; color: rgba(255,255,255,0.75); font-weight: 500; }
+  .cfo-breakdown-count {
+    background: rgba(255,255,255,0.1);
+    border-radius: 4px;
+    padding: 1px 8px;
+    font-size: 12px;
+    font-weight: 700;
+    color: #FFFFFF;
+  }
+  .cfo-breakdown-amount {
+    font-weight: 700;
+    font-size: 13px;
+    color: #F87171;
+  }
+
+  /* Confidence Score Badge */
+  .conf-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    border-radius: var(--radius);
+    padding: 3px 8px;
+    font-size: 11px;
+    font-weight: 700;
+    margin-top: 6px;
+  }
+  .conf-badge.high { background: var(--success-soft); color: var(--success); border: 1px solid var(--success-border); }
+  .conf-badge.medium { background: var(--warning-soft); color: var(--warning); border: 1px solid var(--warning-border); }
+  .conf-badge.low { background: var(--destructive-soft); color: var(--destructive); border: 1px solid var(--destructive-border); }
+  .conf-bar {
+    height: 3px;
+    border-radius: 2px;
+    background: var(--border);
+    margin-top: 5px;
+    overflow: hidden;
+  }
+  .conf-bar-fill { height: 100%; border-radius: 2px; transition: width 0.6s ease; }
+  .conf-bar-fill.high { background: var(--success); }
+  .conf-bar-fill.medium { background: var(--warning); }
+  .conf-bar-fill.low { background: var(--destructive); }
+
+  /* Animated Loading Steps */
+  .loading-steps {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-top: 16px;
+    text-align: left;
+    max-width: 320px;
+  }
+  .loading-step {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--muted-foreground);
+    opacity: 0;
+    transform: translateX(-8px);
+    transition: opacity 0.3s ease, transform 0.3s ease, color 0.3s ease;
+  }
+  .loading-step.visible { opacity: 1; transform: translateX(0); }
+  .loading-step.done { color: var(--success); }
+  .loading-step.done .step-icon::before { content: "✅"; }
+  .loading-step.active { color: var(--rzp-blue); }
+  .loading-step.active .step-icon::before { content: "⚙️"; }
+  .loading-step .step-icon { font-size: 14px; }
+  .loading-step .step-icon::before { content: "○"; color: var(--border); }
 </style>
 </head>
 <body>
@@ -1023,6 +1185,14 @@
     <div class="spinner"></div>
     <div class="loading-text" id="loading-text">Tracing multi-hop transaction chain...</div>
     <div class="loading-sub">Walking Payment → Settlement → Ledger paths & generating resolution actions</div>
+    <div class="loading-steps" id="loading-steps">
+      <div class="loading-step" id="step-1"><span class="step-icon"></span>Loading payment records</div>
+      <div class="loading-step" id="step-2"><span class="step-icon"></span>Matching settlement data</div>
+      <div class="loading-step" id="step-3"><span class="step-icon"></span>Cross-checking ledger entries</div>
+      <div class="loading-step" id="step-4"><span class="step-icon"></span>Identifying break hops</div>
+      <div class="loading-step" id="step-5"><span class="step-icon"></span>Drafting AI resolutions via Groq</div>
+      <div class="loading-step" id="step-6"><span class="step-icon"></span>Scoring against ground truth</div>
+    </div>
   </div>
 
   <!-- Results Dashboard -->
@@ -1030,6 +1200,19 @@
 
     <!-- Stat Grid -->
     <div class="stat-grid" id="stat-grid"></div>
+
+    <!-- CFO Exception Summary Card -->
+    <div class="cfo-summary-card" id="cfo-summary">
+      <div class="cfo-header">
+        <div>
+          <div class="cfo-title">📋 CFO Exception Summary</div>
+          <div class="cfo-subtitle">AI-identified financial risk — requires finance team review</div>
+        </div>
+        <span class="cfo-tag">Agent Report</span>
+      </div>
+      <div class="cfo-grid" id="cfo-metrics-grid"></div>
+      <div id="cfo-breakdown-rows"></div>
+    </div>
 
     <!-- Hop Breakdown Panel -->
     <div class="card">
@@ -1069,6 +1252,7 @@
               <th>Transaction & Details</th>
               <th>Chain Pipeline Visual</th>
               <th>Break Reason</th>
+              <th>AI Confidence</th>
               <th>Drafted Resolution Action</th>
             </tr>
           </thead>
@@ -1204,6 +1388,28 @@ function showToast(msg) {
   setTimeout(() => toast.classList.remove("show"), 2500);
 }
 
+// Animated Loading Steps
+function runLoadingSteps() {
+  const delays = [100, 600, 1100, 1600, 2100, 2600];
+  for (let i = 1; i <= 6; i++) {
+    const el = document.getElementById(`step-${i}`);
+    if (!el) continue;
+    el.className = 'loading-step';
+  }
+  delays.forEach((delay, idx) => {
+    setTimeout(() => {
+      // Mark previous as done
+      if (idx > 0) {
+        const prev = document.getElementById(`step-${idx}`);
+        if (prev) prev.className = 'loading-step visible done';
+      }
+      // Mark current as active
+      const cur = document.getElementById(`step-${idx + 1}`);
+      if (cur) cur.className = 'loading-step visible active';
+    }, delay);
+  });
+}
+
 // API Trace Execution
 async function runTrace(formData) {
   hideError();
@@ -1212,12 +1418,18 @@ async function runTrace(formData) {
   runBtn.disabled = true;
   sampleBtn.disabled = true;
   loadingText.textContent = "Tracing transaction hops across Payment → Settlement → Ledger...";
+  runLoadingSteps();
 
   try {
     const res = await fetch(`${API_BASE}/api/trace`, { method: "POST", body: formData });
     if (!res.ok) {
       const errData = await res.json().catch(() => ({}));
       throw new Error(errData.error || `Server returned ${res.status}`);
+    }
+    // Mark all steps done
+    for (let i = 1; i <= 6; i++) {
+      const el = document.getElementById(`step-${i}`);
+      if (el) el.className = 'loading-step visible done';
     }
     const data = await res.json();
     renderResults(data);
@@ -1353,6 +1565,9 @@ function renderResults(data) {
   }
   statGrid.innerHTML = statCards;
 
+  // CFO Exception Summary Card
+  renderCfoSummary(data);
+
   // Hop Breakdown Chips
   const hopBreakdown = document.getElementById("hop-breakdown");
   const hops = s.breaks_by_hop || {};
@@ -1391,6 +1606,103 @@ function renderResults(data) {
   resetQaThread();
 
   results.classList.add("show");
+}
+
+// Confidence Scoring Engine
+function computeConfidence(row) {
+  if (row.break_hop === "NONE") return { score: 100, tier: "high", label: "Resolved" };
+
+  let score = 100;
+  const reason = (row.break_detail?.reason || "").toLowerCase();
+
+  // Deterministic signals → high confidence
+  if (reason.includes("missing") || reason.includes("not found")) score -= 10;
+  if (reason.includes("fee") || reason.includes("variance") || reason.includes("amount")) score -= 15;
+  if (reason.includes("delay") || reason.includes("timeout")) score -= 20;
+  if (reason.includes("duplicate")) score -= 10;
+
+  // Multiple statuses failing → lower confidence
+  const failures = [row.payment_status, row.settlement_status, row.ledger_status]
+    .filter(s => s && s !== "OK").length;
+  score -= failures * 10;
+
+  // Has a resolution drafted → more confident
+  if (!row.resolution) score -= 15;
+  else if (row.resolution.resolution_type === "ESCALATE_TO_HUMAN") score -= 20;
+
+  // Scoring outcome known → bonus
+  if (row.scoring_outcome === "CORRECT") score += 5;
+  if (row.scoring_outcome === "WRONG_HOP") score -= 15;
+
+  score = Math.max(18, Math.min(97, score));
+
+  let tier, label;
+  if (score >= 75) { tier = "high"; label = `HIGH (${score}%)`; }
+  else if (score >= 50) { tier = "medium"; label = `MEDIUM (${score}%)`; }
+  else { tier = "low"; label = `LOW (${score}%)`; }
+
+  return { score, tier, label };
+}
+
+// CFO Exception Summary Renderer
+function renderCfoSummary(data) {
+  const s = data.summary;
+  const rows = data.rows || [];
+  const breakRows = rows.filter(r => r.break_hop !== "NONE");
+
+  const totalAtRisk = breakRows.reduce((sum, r) => sum + (parseFloat(r.amount || 0)), 0);
+  const byHop = {};
+  breakRows.forEach(r => {
+    if (!byHop[r.break_hop]) byHop[r.break_hop] = { count: 0, amount: 0 };
+    byHop[r.break_hop].count++;
+    byHop[r.break_hop].amount += parseFloat(r.amount || 0);
+  });
+
+  const highConf = breakRows.filter(r => computeConfidence(r).tier === "high").length;
+  const lowConf  = breakRows.filter(r => computeConfidence(r).tier === "low").length;
+
+  const fmt = (n) => n > 0 ? `₹${n.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2})}` : `₹0.00`;
+
+  document.getElementById("cfo-metrics-grid").innerHTML = `
+    <div class="cfo-metric">
+      <div class="cfo-metric-label">Total Breaks</div>
+      <div class="cfo-metric-value red">${breakRows.length}</div>
+      <div class="cfo-metric-sub">of ${s.total} chains analyzed</div>
+    </div>
+    <div class="cfo-metric">
+      <div class="cfo-metric-label">Amount at Risk</div>
+      <div class="cfo-metric-value yellow">${fmt(totalAtRisk)}</div>
+      <div class="cfo-metric-sub">across broken chains</div>
+    </div>
+    <div class="cfo-metric">
+      <div class="cfo-metric-label">High Confidence Fixes</div>
+      <div class="cfo-metric-value green">${highConf}</div>
+      <div class="cfo-metric-sub">ready for human approval</div>
+    </div>
+    <div class="cfo-metric">
+      <div class="cfo-metric-label">Low Confidence</div>
+      <div class="cfo-metric-value red">${lowConf}</div>
+      <div class="cfo-metric-sub">need manual investigation</div>
+    </div>
+  `;
+
+  const hopDotMap = { GATEWAY: "gateway", SETTLEMENT: "settlement", LEDGER: "ledger" };
+  const hopLabelMap = { GATEWAY: "Gateway Failures", SETTLEMENT: "Settlement Gaps", LEDGER: "Ledger Discrepancies" };
+
+  const breakdownHtml = Object.entries(byHop).map(([hop, d]) => `
+    <div class="cfo-breakdown-row">
+      <div class="cfo-hop-dot ${hopDotMap[hop] || ''}"></div>
+      <div class="cfo-breakdown-label">${hopLabelMap[hop] || hop}</div>
+      <div class="cfo-breakdown-count">${d.count} break${d.count > 1 ? 's':''}</div>
+      <div class="cfo-breakdown-amount">${fmt(d.amount)}</div>
+    </div>
+  `).join("");
+
+  document.getElementById("cfo-breakdown-rows").innerHTML = breakdownHtml || '<div class="cfo-breakdown-row"><div class="cfo-breakdown-label">No breaks detected</div></div>';
+
+  const card = document.getElementById("cfo-summary");
+  if (breakRows.length > 0) card.classList.add("show");
+  else card.classList.remove("show");
 }
 
 function setFilter(filterType) {
@@ -1453,6 +1765,17 @@ function renderTableRows() {
           <td>${renderChainVisual(r)}</td>
           <td style="font-size: 12px; color: var(--card-foreground); max-width: 240px; line-height: 1.5; font-weight:500;">
             ${r.break_detail?.reason || "Chain resolved end-to-end without breaks."}
+          </td>
+          <td>
+            ${(() => {
+              const conf = computeConfidence(r);
+              const icon = conf.tier === 'high' ? '⚡' : conf.tier === 'medium' ? '⚠️' : '🔴';
+              return `
+                <div class="conf-badge ${conf.tier}">${icon} ${conf.label}</div>
+                <div class="conf-bar"><div class="conf-bar-fill ${conf.tier}" style="width:${conf.score}%"></div></div>
+                ${conf.tier === 'low' ? '<div style="font-size:10px;color:var(--destructive);margin-top:4px;">Needs manual review</div>' : ''}
+              `;
+            })()}
           </td>
           <td>
             ${res ? `
