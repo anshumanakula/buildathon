@@ -5,23 +5,18 @@ POST /api/trace
   multipart/form-data with three files: 'payments', 'settlements', 'ledger'
   optional fourth file 'ground_truth' to compute break-hop accuracy
 
-  Pipeline:
-    1. tracer.trace_chain()       — walks payment -> settlement -> ledger,
-                                     finds the exact hop where each chain breaks
-    2. resolver.draft_resolutions() — Groq drafts the actual fix per break
-    3. scorer.score()             — break-hop accuracy if ground truth given
-
 GET /api/sample
-  Returns bundled sample data (4 CSVs) for the "use sample data" button.
-
 GET /health
+
+CORS is handled manually only (no flask_cors library) to avoid two CORS
+mechanisms fighting over response headers, which was silently overwriting
+the correct header with an invalid one.
 """
 
 import io
 import os
 import time
 from flask import Flask, request, jsonify, send_from_directory
-from flask_cors import CORS
 
 from tracer import (
     load_payments_from_stream, load_settlements_from_stream, load_ledger_from_stream,
@@ -32,14 +27,15 @@ from scorer import load_ground_truth_from_stream, score
 from qa_agent import answer_question
 
 app = Flask(__name__)
-CORS(app, resources={r"/*": {"origins": "*"}}, supports_credentials=False)
+
+SAMPLE_DIR = os.path.join(os.path.dirname(__file__), "sample_data")
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 
 @app.after_request
 def add_cors_headers(response):
-    # When opened as a local file:// page, browsers send Origin: null.
-    # Returning "null" back is NOT treated as a wildcard — the browser still
-    # blocks the request. We must return "*" in that case.
+    # Browsers send Origin: null for local file:// pages. Echoing "null"
+    # back is NOT a valid wildcard — browsers still block it. Must send "*".
     origin = request.headers.get("Origin", "")
     allowed_origin = "*" if (not origin or origin == "null") else origin
     response.headers["Access-Control-Allow-Origin"] = allowed_origin
@@ -51,20 +47,12 @@ def add_cors_headers(response):
 @app.route("/", defaults={"_any": ""}, methods=["OPTIONS"])
 @app.route("/<path:_any>", methods=["OPTIONS"])
 def cors_preflight(_any):
-    resp = app.make_response("")
-    resp.status_code = 204
-    resp.headers["Access-Control-Allow-Origin"] = "*"
-    resp.headers["Access-Control-Allow-Methods"] = "GET, POST, OPTIONS"
-    resp.headers["Access-Control-Allow-Headers"] = "Content-Type, Authorization"
-    return resp
-
-SAMPLE_DIR = os.path.join(os.path.dirname(__file__), "sample_data")
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+    return "", 204
 
 
 @app.route("/")
 def index():
-    """Serve the frontend so opening http://localhost:5000 works with zero CORS issues."""
+    """Serve the frontend so opening the Render URL directly also works."""
     return send_from_directory(BASE_DIR, "index.html")
 
 
@@ -122,11 +110,9 @@ def api_trace():
 
     payments_by_id = {p.txn_id: p for p in payments}
 
-    # ---- Stage 1: chain tracing ----
     results = trace_chain(payments, settlements, ledger)
     summary = summarize(results)
 
-    # ---- Stage 2: resolution drafting on every break ----
     audit_log = []
     results = draft_resolutions(results, payments_by_id, audit_log)
 
@@ -156,7 +142,6 @@ def api_trace():
         "audit_log": audit_log,
     }
 
-    # ---- Stage 3: optional scoring against ground truth ----
     gt_file = request.files.get("ground_truth")
     if gt_file:
         try:
@@ -179,10 +164,6 @@ def api_trace():
 
 @app.route("/api/ask", methods=["POST"])
 def api_ask():
-    """Read-only Q&A over a completed run's results. The frontend sends
-    back the same summary/rows/metrics it received from /api/trace —
-    this endpoint never re-runs the pipeline or touches any file, it only
-    reasons over data that was already computed."""
     body = request.get_json(silent=True) or {}
     question = body.get("question", "")
     summary = body.get("summary", {})
